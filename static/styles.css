@@ -24,7 +24,7 @@ nav ul li a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 40%;
+    width: 300px;
     margin: 10px auto;
 
 }
