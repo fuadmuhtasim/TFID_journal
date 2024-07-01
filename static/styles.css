@@ -28,3 +28,7 @@ nav ul li a {
     margin: 10px auto;
 
 }
+
+.hidden {
+    display: none;
+}
