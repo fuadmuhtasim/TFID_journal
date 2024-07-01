@@ -10,7 +10,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(actix_files::Files::new("/", "./static").index_file("index.html"))
-            .route("/", web::get().to(greet)) // Configure the route
+            
     })
     .bind("127.0.0.1:8080")? // Bind to an address and port
     .run()
