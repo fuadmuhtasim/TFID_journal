@@ -35,26 +35,10 @@
 </head>
 <body>
     <div class="button-container">
-        <button onclick="createAction()">Create</button>
-        <button onclick="viewAction()">View</button>
-        <button onclick="chatAction()">Chat</button>
+        <form action="./add" method="POST">
+            <button type="submit">Create</button>
+        </form>
     </div>
 
-    <script>
-        function createAction() {
-            alert("Create button clicked!");
-            console.log("Button clicked!");
-        }
-
-        function viewAction() {
-            alert("View button clicked!");
-            console.log("Button clicked!");
-        }
-
-        function chatAction() {
-            alert("Chat button clicked!");
-            console.log("Button clicked!");
-        }
-    </script>
 </body>
 </html>

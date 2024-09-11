@@ -1,6 +1,7 @@
 const path = require('path');
 const pool = require('../database/database');
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 module.exports = async (req, res) => {
   if (req) {
@@ -8,7 +9,6 @@ module.exports = async (req, res) => {
   } else {
     console.log('Login Form Error!')
   }
-
   try {
     const client = await pool.connect()
     try {
@@ -20,6 +20,11 @@ module.exports = async (req, res) => {
       if (result.rows.length > 0) {
         // Email and password match
         console.log('User found!', result.rows[0])
+
+        const token = jwt.sign({userId: result.rows[0].id}, process.env.MY_SECRET, {expiresIn: "1h"});
+        res.cookie("token", token,{
+            httpOnly: true
+        });
         res.sendFile(path.join(__dirname, '../public', 'landingpage.html'))
       } else {
         // No match found
@@ -36,4 +41,5 @@ module.exports = async (req, res) => {
     console.error('Error in Database connection:', err) // Corrected to `err`
     res.status(500).send('Database connection failed')
   }
-}
+
+};
