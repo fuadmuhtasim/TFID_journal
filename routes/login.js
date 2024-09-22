@@ -3,12 +3,15 @@ const pool = require('../database/database');
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
+//This async function is exported to handle login requests
+//it gets a client thread to work with a database and to query it
 module.exports = async (req, res) => {
   if (req) {
     console.log('Login Details Received')
   } else {
     console.log('Login Form Error!')
   }
+  //Querying the database for email and password
   try {
     const client = await pool.connect()
     try {
@@ -16,18 +19,19 @@ module.exports = async (req, res) => {
         'SELECT * FROM users WHERE username = $1 AND password = $2',
         [req.body.email, req.body.password]
       )
-
+      // If Email and password match, console.log(Match found) ->
       if (result.rows.length > 0) {
-        // Email and password match
-        console.log('User found!', result.rows[0])
-
-        const token = jwt.sign({userId: result.rows[0].id}, process.env.MY_SECRET, {expiresIn: "1h"});
-        res.cookie("token", token,{
+        console.log('User found.', result.rows[0])
+          //-> create a jwt token, sign it ->
+          const token = jwt.sign({userId: result.rows[0].id}, process.env.MY_SECRET, {expiresIn: "1h"});
+          //-> responds with a cookie saved into the browser called token
+          res.cookie("token", token,{
             httpOnly: true
-        });
-        res.sendFile(path.join(__dirname, '../public', 'landingpage.html'))
+          });
+        // Also sends the landing page file as a response
+        res.sendFile(path.join(__dirname, '../public', 'landingpage.html'));
       } else {
-        // No match found
+        // returns no match found
         console.log('Invalid email or password')
         res.send('User Not Found!')
       }

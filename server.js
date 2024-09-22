@@ -6,8 +6,7 @@ const pool = require('./database/database')
 const loginRoute = require("./routes/login");
 const signupRoute = require("./routes/signup");
 const add = require("./routes/add");
-//const signupRoute = require("./routes/signup");
-// const cookieParser = require("cookie-parser");
+const { cookieJwtAuth } = require("./middleware/cookieJwtAuth");
 
 
 //Serve static files from the 'public' directory using virtual "hidden" path
@@ -15,7 +14,6 @@ app.use('/hidden', express.static(path.join(__dirname, 'public')))
 //To encode and decode form email data in form
 app.use(express.urlencoded({ extended: true }))
 //To encode and decode form email data in form
-// app.use(cookieParser());
 
 //Serve the index.html file on the root path
 app.get('/', (req, res) => {
@@ -32,7 +30,7 @@ app.post('/signup_form', signupRoute);
 //Handler: Login Form Submission Endpoint
 app.post('/login_form', loginRoute);
 //Handler: Add Submission Endpoint
-app.post('/add', add);
+app.post('/add', cookieJwtAuth, add);
 
 //Listen to the port ->
 app.listen(port, () => {
